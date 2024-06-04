@@ -5,9 +5,9 @@ public class GeneratorV2 extends GeneratorHeightMap {
     public int[][] getHeightMap(int width, int height) {
         int[][] heightMap = new int[width][height];
 
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                heightMap[i][j] = Math.abs(i) + Math.abs(j);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                heightMap[x][y] = Math.abs(x) + Math.abs(y);
             }
         }
 

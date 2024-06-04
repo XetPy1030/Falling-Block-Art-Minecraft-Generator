@@ -5,14 +5,14 @@ public class GeneratorV3 extends GeneratorHeightMap {
     public int[][] getHeightMap(int width, int height) {
         int[][] heightMap = new int[width][height];
 
-        for (int i = 0; i < width; i++) {
-            if (i % 2 == 0) {
-                for (int j = 0; j < height; j++) {
-                    heightMap[i][j] = i * height + j;
+        for (int x = 0; x < width; x++) {
+            if (x % 2 == 0) {
+                for (int y = 0; y < height; y++) {
+                    heightMap[x][y] = x * height + y;
                 }
             } else {
-                for (int j = height - 1; j >= 0; j--) {
-                    heightMap[i][j] = i * height + (height - j - 1);
+                for (int y = height - 1; y >= 0; y--) {
+                    heightMap[x][y] = (x + 1) * height - y - 1;
                 }
             }
         }
