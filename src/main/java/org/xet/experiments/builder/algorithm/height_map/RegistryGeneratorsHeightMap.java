@@ -10,6 +10,7 @@ public class RegistryGeneratorsHeightMap {
     static GeneratorHeightMap V2 = registerGenerator(new GeneratorV2());
     static GeneratorHeightMap V3 = registerGenerator(new GeneratorV3());
     static GeneratorHeightMap V4 = registerGenerator(new GeneratorV4());
+    static GeneratorHeightMap V5 = registerGenerator(new GeneratorGame());
 
     public static GeneratorHeightMap getGeneratorByName(String name) {
         for (GeneratorHeightMap gen : generators) {
