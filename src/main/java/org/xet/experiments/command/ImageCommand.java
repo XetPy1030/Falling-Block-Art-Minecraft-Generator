@@ -15,7 +15,10 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xet.experiments.builder.algorithm.BuilderImage;
 import org.xet.experiments.builder.algorithm.ImageGetter;
 import org.xet.experiments.builder.algorithm.height_map.RegistryGeneratorsHeightMap;
@@ -25,6 +28,8 @@ import java.util.concurrent.CompletableFuture;
 import static net.minecraft.server.command.CommandManager.argument;
 
 public class ImageCommand {
+    private static final Logger LOGGER = LogManager.getLogger(ImageCommand.class);
+
     public static void register(CommandDispatcher<ServerCommandSource> serverCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("image")
                 .then(argument("width", IntegerArgumentType.integer())
@@ -47,23 +52,33 @@ public class ImageCommand {
 
         Vec3d pos = player.getPos();
         ServerWorld serverWorld = player.getWorld();
+        ServerCommandSource source = context.getSource();
 
-        BuilderImage builderImage = new BuilderImage(context);
-        builderImage.build(pos, serverWorld);
+        LOGGER.info("Игрок {} выполняет команду генерации изображения в позиции {}", 
+                   player.getName().getString(), pos);
 
-        // ToDo: в треды?
-//        org.xet.experiments.ImageCommand.Image image = openFile(context);
+        try {
+            BuilderImage builderImage = new BuilderImage(context);
+            
+            source.sendMessage(Text.literal("§eЗапуск генерации изображения..."));
+            
+            builderImage.buildAsync(pos, serverWorld, source)
+                .exceptionally(throwable -> {
+                    LOGGER.error("Критическая ошибка при выполнении команды image", throwable);
+                    source.sendMessage(Text.literal("§cКритическая ошибка: " + throwable.getMessage()));
+                    return null;
+                });
 
+            ItemStack stack = new ItemStack(Items.DIAMOND);
+            player.giveItemStack(stack);
+            
+            source.sendMessage(Text.literal("§aКоманда успешно запущена! Генерация выполняется в фоновом режиме."));
 
-//        Thread thread = new Thread(() -> {
-//            buildImage(pos, serverWorld, image);
-//        });
-//        thread.start();
-//
-//        buildImage(pos, serverWorld, image);
-
-        ItemStack stack = new ItemStack(Items.DIAMOND);
-        player.giveItemStack(stack);
+        } catch (Exception e) {
+            LOGGER.error("Ошибка при создании BuilderImage", e);
+            source.sendMessage(Text.literal("§cОшибка при инициализации: " + e.getMessage()));
+            return 0;
+        }
 
         return 1;
     }
