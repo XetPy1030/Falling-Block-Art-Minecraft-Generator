@@ -30,7 +30,7 @@ import java.util.concurrent.*;
 
 public class BuilderImage {
     private static final Logger LOGGER = LogManager.getLogger(BuilderImage.class);
-    private static final int BLOCKS_PER_TICK = 15;
+    private static final int BLOCKS_PER_TICK = 10;
     private static final int GENERATION_TIMEOUT_SECONDS = 30;
     
     private ColorHeightMaps fallingBlocks;
