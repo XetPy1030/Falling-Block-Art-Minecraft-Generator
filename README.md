@@ -2,6 +2,9 @@
 
 🎨 **Falling Block Generator for Minecraft** - a mod for creating artistic images from falling sand blocks in Minecraft using various height generation algorithms.
 
+![Demo](docs/images/demo-falling-blocks.png)
+*Example of mod operation - creating an image from falling blocks*
+
 ## 📋 Description
 
 This mod allows you to create beautiful artistic compositions from falling blocks in Minecraft. The mod analyzes images and creates three-dimensional structures using various height generation algorithms, turning ordinary images into structures made of sand blocks. When the first block is destroyed, the entire structure begins to fall, creating an amazing animation that gradually reveals the hidden image. Each block falls in the correct sequence, forming the original picture during the falling process.
